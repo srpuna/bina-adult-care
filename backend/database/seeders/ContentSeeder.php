@@ -34,14 +34,14 @@ class ContentSeeder extends Seeder
             [
                 'page' => 'home',
                 'key' => 'community_text',
-                'value' => 'By choosing us, you're not just selecting a home care provider; you're joining a community of caregivers dedicated to making your life easier.',
+                'value' => 'By choosing us, you\'re not just selecting a home care provider; you\'re joining a community of caregivers dedicated to making your life easier.',
             ],
 
             // About page content
             [
                 'page' => 'about',
                 'key' => 'main_title',
-                'value' => 'We Understand Caregiving — Because We've Lived It.',
+                'value' => 'We Understand Caregiving — Because We\'ve Lived It.',
             ],
             [
                 'page' => 'about',
