@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bina Adult Care</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Dashboard specific styles */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+        }
+
+        .sidebar-header {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-nav a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav i {
+            margin-right: 0.5rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .image-preview {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" data-section="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" data-section="about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="#" data-section="services"><i class="fas fa-hand-holding-heart"></i> Services</a></li>
+                <li><a href="#" data-section="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Dashboard</h1>
+                <button class="btn primary" id="saveChanges">Save Changes</button>
+            </div>
+
+            <!-- Home Section -->
+            <div class="content-section active" id="home-section">
+                <h2>Edit Home Page</h2>
+                <div class="form-group">
+                    <label>Hero Headline</label>
+                    <input type="text" id="heroHeadline" value="Owned, Operated, and Managed by Caregivers.">
+                </div>
+                <div class="form-group">
+                    <label>Hero Subtext</label>
+                    <textarea id="heroSubtext">We look after your best interests, with a profound understanding of the challenges caregivers face firsthand.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Hero Background Image</label>
+                    <input type="file" id="heroImage" accept="image/*">
+                    <img src="../images/hero-bg.jpg" alt="Hero Background" class="image-preview" id="heroImagePreview">
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div class="content-section" id="about-section">
+                <h2>Edit About Page</h2>
+                <div class="form-group">
+                    <label>Our Story</label>
+                    <textarea id="aboutStory">As an organization founded and operated by individuals who have walked in your shoes...</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Mission Statement</label>
+                    <textarea id="missionStatement">To provide exceptional care services while creating meaningful career opportunities...</textarea>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div class="content-section" id="services-section">
+                <h2>Edit Services</h2>
+                <div id="servicesList">
+                    <!-- Services will be dynamically loaded here -->
+                </div>
+                <button class="btn secondary" id="addService">Add New Service</button>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="content-section" id="contact-section">
+                <h2>Edit Contact Information</h2>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="address" value="123 Care Street, Suite 100">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="phone" value="(555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" value="info@binaadultcare.com">
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="content-section" id="settings-section">
+                <h2>Settings</h2>
+                <div class="form-group">
+                    <label>Export Content</label>
+                    <button class="btn secondary" id="exportContent">Export JSON</button>
+                </div>
+                <div class="form-group">
+                    <label>Import Content</label>
+                    <input type="file" id="importContent" accept=".json">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Check authentication
+        if (!localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Navigation
+        document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.dataset.section;
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(`${section}-section`).classList.add('active');
+            });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'login.html';
+        });
+
+        // Save changes
+        document.getElementById('saveChanges').addEventListener('click', function() {
+            // Here you would typically send the changes to a server
+            // For now, we'll just show a success message
+            showToast('Changes saved successfully!');
+        });
+
+        // Image preview
+        document.getElementById('heroImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('heroImagePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Export content
+        document.getElementById('exportContent').addEventListener('click', function() {
+            const content = {
+                home: {
+                    headline: document.getElementById('heroHeadline').value,
+                    subtext: document.getElementById('heroSubtext').value
+                },
+                contact: {
+                    address: document.getElementById('address').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value
+                }
+                // Add more sections as needed
+            };
+
+            const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'content-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Import content
+        document.getElementById('importContent').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const content = JSON.parse(e.target.result);
+                        // Update form fields with imported content
+                        document.getElementById('heroHeadline').value = content.home.headline;
+                        document.getElementById('heroSubtext').value = content.home.subtext;
+                        document.getElementById('address').value = content.contact.address;
+                        document.getElementById('phone').value = content.contact.phone;
+                        document.getElementById('email').value = content.contact.email;
+                        showToast('Content imported successfully!');
+                    } catch (error) {
+                        showToast('Error importing content!');
+                    }
+                }
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>
