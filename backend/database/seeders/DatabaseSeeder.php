@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@binaadultcare.com',
+            'password' => hash::make('password')
         ]);
 
         // Seed content and services
