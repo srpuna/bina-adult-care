@@ -1,4 +1,5 @@
-# Bina Adult Care Website
+# Bina Adult Care Website 
+Demo site: https://binaadultcare.infinityfreeapp.com/?i=1
 
 This is a modern web application for Bina Adult Care, consisting of a static frontend and Laravel backend API.
 
