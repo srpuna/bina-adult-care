@@ -25,7 +25,11 @@
             </ul>
         </div>
     </nav>
+<?php if(isset($_GET['page'])){
 
+    echo "<div class='container'><h2> Hello World</h2></div>";
+ }
+else {?>
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -87,7 +91,7 @@
             <a href="#apply" class="btn primary">Apply Now</a>
         </div>
     </section>
-
+<?php } ?>
     <!-- Footer -->
     <footer>
         <div class="container">
